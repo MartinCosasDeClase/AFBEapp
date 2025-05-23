@@ -37,7 +37,10 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
+
+
 
 dependencies {
 
@@ -49,6 +52,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(platform("androidx.compose:compose-bom:2025.05.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
