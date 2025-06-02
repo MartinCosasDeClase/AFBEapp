@@ -10,7 +10,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.afbe.MainActivity
-import com.example.afbe.MainActivity.Companion.retrofitInstance
+import com.example.afbe.MainActivity.RetrofitClient
 import com.example.afbe.R
 import com.example.afbe.preferences.UserPreferences
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -69,7 +69,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 val nif = userPreferences.getUserNif() ?: ""
 
                 if (nif.isNotEmpty()) {
-                    retrofitInstance.api.registerFcmToken(
+                    RetrofitClient.retrofitInstance.api.registerFcmToken(
                         mapOf("nif" to nif, "token" to token)
                     )
                 } else {
