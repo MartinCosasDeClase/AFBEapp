@@ -11,24 +11,30 @@ import kotlinx.coroutines.launch
 
 class PartiturasViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
-    private val _partitura = MutableLiveData<List<Partitura>>()
-    val partituras: LiveData<List<Partitura>> get() = _partitura
-    val retrofitInstance = MainActivity.retrofitInstance
+    private val _partituras = MutableLiveData<List<Partitura>>()
+    val partituras: LiveData<List<Partitura>> get() = _partituras
+    private val retrofitInstance = MainActivity.retrofitInstance
 
     fun fetchPartituras() {
         viewModelScope.launch {
             try {
-                val token = userPreferences.getToken()
-                if (token != null) {
-                    val response = retrofitInstance.api.getPartituras()
-                    Log.d("XXX", response.toString())
-                    _partitura.postValue(response)
+                val userNif = userPreferences.getUserNif()
+                if (!userNif.isNullOrEmpty()) {
+                    Log.d("FETCH_PARTITURAS", "Obteniendo partituras para el NIF: $userNif")
+                    val response = retrofitInstance.api.getPartituraByInstrumento(userNif)
+                    _partituras.postValue(response)
+                    Log.d("FETCH_PARTITURAS", "Partituras recibidas: ${response.size}")
                 } else {
-                    Log.d("XXX", "No se ha encontrado el tocken")
+                    Log.e("FETCH_PARTITURAS", "No se encontró NIF en DataStore")
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("FETCH_PARTITURAS", "Error al obtener partituras desde el backend", e)
             }
+        }
+    }
+    fun clearToken(){
+        viewModelScope.launch(){
+            userPreferences.clearToken()
         }
     }
 }

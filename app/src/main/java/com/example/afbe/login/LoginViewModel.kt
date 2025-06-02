@@ -1,13 +1,12 @@
 package com.example.afbe.login
 
-import android.content.Context
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.afbe.API.LoginFeatures.LoginRequest
-import com.example.afbe.API.RetrofitInstance
 import com.example.afbe.MainActivity
 import com.example.afbe.preferences.UserPreferences
 import kotlinx.coroutines.launch
@@ -46,8 +45,12 @@ class LoginViewModel(private val userPreferences: UserPreferences) : ViewModel()
 
             if (response.isSuccessful && response.body() != null) {
                 val token = response.body()!!.token
+                val nif = response.body()!!.nif
                 userPreferences.saveToken(token)
+                Log.e("XXX", "Aqui si llego")
+                userPreferences.saveUserNif(nif)
                 onSuccess()
+
             } else {
                 onError()
             }

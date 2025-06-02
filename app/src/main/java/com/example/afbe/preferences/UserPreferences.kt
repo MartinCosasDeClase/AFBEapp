@@ -8,12 +8,14 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
+
 val Context.dataStore by preferencesDataStore("user_prefs")
 
 class UserPreferences(private val context: Context) {
 
     companion object {
         val TOKEN_KEY = stringPreferencesKey("jwt_token")
+        val USER_KEY = stringPreferencesKey("user_data")
     }
 
     suspend fun saveToken(token: String) {
@@ -33,4 +35,19 @@ class UserPreferences(private val context: Context) {
             prefs.remove(TOKEN_KEY)
         }
     }
+
+
+    suspend fun saveUserNif(nif: String) {
+        context.dataStore.edit { prefs ->
+            prefs[USER_KEY] = nif
+        }
+    }
+
+
+    suspend fun getUserNif(): String? {
+        return context.dataStore.data.map { prefs ->
+            prefs[USER_KEY]
+        }.first()
+    }
+
 }

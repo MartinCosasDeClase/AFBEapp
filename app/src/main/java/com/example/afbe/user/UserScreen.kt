@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.afbe.R
 
 
@@ -51,6 +52,7 @@ fun UserScreen(
     viewModel: UserViewModel
 ) {
     val user = viewModel.user.value
+    val baseUrl = "https://definite-cobra-diverse.ngrok-free.app"
 
     LaunchedEffect(Unit) {
         viewModel.fetchUser()
@@ -81,14 +83,16 @@ fun UserScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.perfiltest),
+            AsyncImage(
+                model = baseUrl+"/images/"+user?.userImage,
                 contentDescription = "Avatar del usuario",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFAFFFCA))
+                    .background(Color(0xFFAFFFCA)),
+                error = painterResource(id = R.drawable.afbelogo),
+                placeholder = painterResource(id = R.drawable.afbelogo)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -111,22 +115,22 @@ fun UserScreen(
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    PerfilItem(Icons.Default.Warning, "Instrumento: ${user?.instrumento ?: "-"}", Modifier.weight(1f))
+                    PerfilItem(Icons.Default.Warning, "Instrumento: ${(user?.instrumento?.nombre + " " + user?.instrumento?.categoria)}", Modifier.weight(1f))
                     PerfilItem(Icons.Default.Email, "E-mail: ${user?.email ?: "-"}", Modifier.weight(1f))
                     PerfilItem(Icons.Default.Phone, "Teléfono: ${user?.telephone ?: "-"}", Modifier.weight(1f))
                     PerfilItem(Icons.Default.Person, "DNI: ${user?.nif ?: "-"}", Modifier.weight(1f))
-                    PerfilItem(Icons.Default.DateRange, "CUMPLEAÑOS: ${user?.age ?: "-"}", Modifier.weight(1f))
+                    PerfilItem(Icons.Default.DateRange, "EDAD: ${user?.age ?: "-"}", Modifier.weight(1f))
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFAFFFCA))
-            ) {
-                Text("Editar Perfil")
-            }
+//            Button(
+//                onClick = { },
+//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFAFFFCA))
+//            ) {
+//                Text("Editar Perfil")
+//            }
         }
     }
 }

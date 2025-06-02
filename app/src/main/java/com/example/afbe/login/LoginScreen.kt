@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.afbe.R
+import com.example.afbe.utils.ClaveSolLoader
 import kotlinx.coroutines.launch
 
 @Composable
@@ -68,7 +69,7 @@ fun LoginForm(viewModel: LoginViewModel, onLoginSuccess: () -> Unit) {
 
     if (isLoading) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            ClaveSolLoader()
         }
     } else {
         Column(
@@ -82,10 +83,10 @@ fun LoginForm(viewModel: LoginViewModel, onLoginSuccess: () -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.afbelogo),
                 contentDescription = null,
-                modifier = Modifier.size(160.dp)
+                modifier = Modifier.size(200.dp)
             )
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
             TransparentTextField(
                 value = email,
