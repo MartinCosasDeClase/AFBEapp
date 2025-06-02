@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "935818900096",
+    "project_id": "afbe-projec-88",
+    "storage_bucket": "afbe-projec-88.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935818900096:android:efe4cb8c22c6134fb72c65",
+        "android_client_info": {
+          "package_name": "com.example.afbe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAB09mKlnq5VdGrIJeQZoqQukUJ18gUmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
