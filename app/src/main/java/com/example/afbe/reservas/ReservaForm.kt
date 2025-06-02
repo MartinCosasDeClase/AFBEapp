@@ -55,12 +55,12 @@ fun ReservaForm(
                     }
                     showDatePicker = false
                 }) {
-                    Text("Aceptar", color = colorGranate) // botón granate
+                    Text("Aceptar", color = colorGranate)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancelar", color = colorGranate) // botón granate
+                    Text("Cancelar", color = colorGranate)
                 }
             }
         ) {

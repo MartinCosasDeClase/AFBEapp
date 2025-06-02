@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit
 object FileDownloader {
 
     fun downloadFile(context: Context, url: String, filename: String) {
-        // Usaremos OkHttp para descargar el archivo (puedes usar Retrofit o lo que quieras)
         val client = OkHttpClient.Builder()
             .callTimeout(30, TimeUnit.SECONDS)
             .build()
@@ -24,7 +23,7 @@ object FileDownloader {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: java.io.IOException) {
-                // Error en descarga
+
                 e.printStackTrace()
                 showToast(context, "Error al descargar archivo")
             }
@@ -43,10 +42,9 @@ object FileDownloader {
 
                 try {
                     val savedUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        // Scoped Storage Android 10+
                         saveFileToDownloadsScopedStorage(context, filename, inputStream)
                     } else {
-                        // Android 9 y anteriores
+
                         saveFileToDownloadsLegacy(context, filename, inputStream)
                     }
 
@@ -90,7 +88,7 @@ object FileDownloader {
         FileOutputStream(file).use { outputStream ->
             inputStream.copyTo(outputStream)
         }
-        // Notificar al MediaScanner que hay un archivo nuevo para que aparezca en la galería/descargas
+
         context.sendBroadcast(
             android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file))
         )
