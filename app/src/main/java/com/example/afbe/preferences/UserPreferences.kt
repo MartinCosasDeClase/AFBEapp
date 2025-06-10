@@ -16,6 +16,7 @@ class UserPreferences(private val context: Context) {
     companion object {
         val TOKEN_KEY = stringPreferencesKey("jwt_token")
         val USER_KEY = stringPreferencesKey("user_data")
+        val FCM_TOKEN_KEY = stringPreferencesKey("fcm_token")
     }
 
     suspend fun saveToken(token: String) {
@@ -50,4 +51,15 @@ class UserPreferences(private val context: Context) {
         }.first()
     }
 
+    suspend fun saveFcmToken(token: String) {
+        context.dataStore.edit { prefs ->
+            prefs[FCM_TOKEN_KEY] = token
+        }
+    }
+
+    suspend fun getFcmToken(): String? {
+        return context.dataStore.data
+            .map { prefs -> prefs[FCM_TOKEN_KEY] }
+            .first()
+    }
 }

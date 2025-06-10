@@ -10,77 +10,69 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.afbe.MainActivity
-import com.example.afbe.MainActivity.RetrofitClient
 import com.example.afbe.R
-import com.example.afbe.preferences.UserPreferences
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    private val userPreferences by lazy { UserPreferences(applicationContext) }
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("FCM", "Nuevo token generado: $token")
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        remoteMessage.notification?.let {
-            sendNotification(it.title ?: "Nueva notificación", it.body ?: "")
+        super.onMessageReceived(remoteMessage)
+
+        Log.d("FCM", "Mensaje recibido de: ${remoteMessage.from}")
+
+        val title = remoteMessage.notification?.title ?: remoteMessage.data["title"]
+        val body = remoteMessage.notification?.body ?: remoteMessage.data["body"]
+
+        if (title != null && body != null) {
+            sendNotification(title, body)
+        } else {
+            Log.w("FCM", "Notificación sin título o cuerpo válido.")
         }
     }
 
-    private fun sendNotification(title: String, messageBody: String) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    private fun sendNotification(title: String, message: String) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val channelId = "AFBE_channel"
+        val channelId = "afbe_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.afbelogo)
             .setContentTitle(title)
-            .setContentText(messageBody)
+            .setContentText(message)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "Notificaciones AFBE",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Canal para notificaciones importantes de AFBE"
+            }
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build())
-    }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val nif = userPreferences.getUserNif() ?: ""
-
-                if (nif.isNotEmpty()) {
-                    RetrofitClient.retrofitInstance.api.registerFcmToken(
-                        mapOf("nif" to nif, "token" to token)
-                    )
-                } else {
-                    Log.w("FCM", "NIF no encontrado, no se puede registrar token")
-                }
-            } catch (e: Exception) {
-                Log.e("FCM", "Error enviando token al backend", e)
-            }
-        }
+        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
     }
 }
-
-
-

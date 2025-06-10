@@ -42,7 +42,7 @@ interface ApiService {
     @GET("/api/publicaciones")
     suspend fun getPublicaciones(): List<Publicacion>
 
-    @POST("/api/users/register-token")
+    @POST("/api/register-token")
     suspend fun registerFcmToken(@Body data: Map<String, String>)
 
     @POST("/api/actos/{actoId}/asistencia/{usuarioId}/confirmar")

@@ -8,6 +8,7 @@ import com.example.afbe.preferences.UserPreferences
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Date
 
 class ReservaViewModel (private val userPreferences: UserPreferences) : ViewModel() {
 
@@ -32,7 +33,7 @@ class ReservaViewModel (private val userPreferences: UserPreferences) : ViewMode
                 val reserva = Reserva(
                     salaId = salaId,
                     nif = userPreferences.getUserNif() as String,
-                    fecha = fecha.toString(),
+                    fecha = fecha,
                     horaInicio = horaInicio.toString(),
                     horaFin = horaFin.toString()
                 )

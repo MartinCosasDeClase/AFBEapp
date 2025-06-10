@@ -115,12 +115,6 @@ fun LoginForm(viewModel: LoginViewModel, onLoginSuccess: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Forgot your password?",
-                color = White.copy(alpha = 0.7f),
-                fontSize = 12.sp,
-                modifier = Modifier.clickable { /* TODO */ }
-            )
         }
     }
 }
